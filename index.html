@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tamarind Travel | 富國島客製化旅遊專家</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        tmGreen: '#9EBC9F',   /* 草綠色 */
+                        tmOrange: '#FFB703',  /* 淺橘色 */
+                        tmDeepGreen: '#2D4F32',
+                    }
+                }
+            }
+        }
+
+        // 通用 Modal 切換邏輯
+        function toggleModal(id) {
+            const modal = document.getElementById(id);
+            if(modal.classList.contains('hidden')) {
+                modal.classList.remove('hidden');
+                modal.classList.add('flex');
+                document.body.style.overflow = 'hidden';
+            } else {
+                modal.classList.add('hidden');
+                modal.classList.remove('flex');
+                document.body.style.overflow = 'auto';
+            }
+        }
+
+        // 更新後的表單處理邏輯
+        function handleFormChoice(type) {
+            let message = "";
+            let targetUrl = "";
+            
+            if (type === 'inquiry') {
+                message = "【初步詢價確認】\n您即將填寫初步詢價單，適合尚未確定日期、想了解預算的貴賓。";
+                // 使用您提供的新詢價單網址
+                targetUrl = "https://docs.google.com/forms/d/e/1FAIpQLSfZ3kfeZKvvMZ8JQzVSaOy91o-VM8qQIncZxvrLOg8a9-kk6w/viewform?embedded=true";
+            } else {
+                message = "【正式預約確認】\n您即將填寫正式預約單，適合已確定日期、準備進入行程規劃的貴賓。";
+                // 保留原本的預約單網址
+                targetUrl = "https://docs.google.com/forms/d/e/1FAIpQLScpxnRLWPkm6U1Bx4XHS2_7Ob7k-CSJuJiqbRVzW9yoR35ZOQ/viewform?embedded=true";
+            }
+
+            if (confirm(message + "\n\n確定要開啟填寫表單嗎？")) {
+                const iframe = document.getElementById('form-iframe');
+                iframe.src = targetUrl; // 動態更換 iframe 來源
+                toggleModal('modal-choice'); 
+                toggleModal('modal-form');   
+            }
+        }
+
+        // 圖片放大專用邏輯
+        function openImageModal(src) {
+            const modal = document.getElementById('modal-image');
+            const fullImg = document.getElementById('full-res-image');
+            fullImg.src = src;
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+            document.body.style.overflow = 'hidden';
+        }
+
+        /* --- 計算機專屬邏輯 --- */
+        function updateEstimate() {
+            const pax = parseInt(document.getElementById('calc-pax').value) || 0;
+            const days = parseInt(document.getElementById('calc-days').value) || 0;
+            const hotelRate = parseInt(document.getElementById('calc-hotel').value) || 0;
+            
+            if (pax <= 0 || days <= 0) {
+                document.getElementById('calc-result-box').classList.add('opacity-20');
+                document.getElementById('res-amount').innerText = "0";
+                return;
+            }
+
+            let carPrice = 0;
+            let carName = "";
+            if (pax <= 4) { carPrice = 1400000; carName = "一般 7 人座"; }
+            else if (pax <= 7) { carPrice = 2200000; carName = "10 人保姆車"; }
+            else if (pax <= 9) { carPrice = 2700000; carName = "12 人保姆車"; }
+            else if (pax <= 16) { carPrice = 3800000; carName = "18 人座中巴"; }
+            else { carPrice = 5500000; carName = "29-45 人大巴士"; }
+
+            let ticketTotal = 0;
+            if (document.getElementById('t-vin').checked) ticketTotal += 1500000;
+            if (document.getElementById('t-cable').checked) ticketTotal += 850000;
+            if (document.getElementById('t-kiss').checked) ticketTotal += 750000;
+
+            let extra = 0;
+            if (document.getElementById('e-starfish').checked) extra += 300000;
+
+            let hotelTotal = 0;
+            if (hotelRate > 0 && days > 1) {
+                const rooms = Math.ceil(pax / 2);
+                const nights = days - 1;
+                hotelTotal = rooms * nights * hotelRate;
+            }
+
+            const base = (carPrice * days) + (ticketTotal * pax) + extra + hotelTotal;
+            const rangeMax = Math.ceil((base * 1.1) / 10000) * 10000;
+
+            document.getElementById('res-car').innerText = carName;
+            document.getElementById('res-amount').innerText = `${base.toLocaleString()} ~ ${rangeMax.toLocaleString()}`;
+            document.getElementById('calc-result-box').classList.remove('opacity-20');
+        }
+    </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;700;900&display=swap');
+        body { font-family: 'Noto Sans TC', sans-serif; scroll-behavior: smooth; }
+        .fade-in { animation: fadeIn 0.3s ease-out forwards; }
+        @keyframes fadeIn { from { opacity: 0; transform: scale(0.98); } to { opacity: 1; transform: scale(1); } }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+        .line-float { animation: float 3s infinite ease-in-out; }
+        .zoom-cursor { cursor: zoom-in; }
+    </style>
+</head>
+<body class="bg-white text-slate-800">
+
+    <nav class="sticky top-0 z-50 bg-white/95 backdrop-blur shadow-sm px-6 py-4 border-b-2 border-tmOrange">
+        <div class="max-w-7xl mx-auto flex justify-between items-center">
+            <div class="text-2xl font-black text-tmDeepGreen tracking-tight">
+                TAMARIND <span class="text-tmOrange italic">TRAVEL</span>
+            </div>
+            <div class="hidden md:flex space-x-8 text-sm font-bold items-center">
+                <button onclick="toggleModal('modal-about')" class="hover:text-tmOrange transition">關於我們</button>
+                <a href="#attractions" class="hover:text-tmOrange transition">富國名勝</a>
+                <button onclick="toggleModal('modal-itinerary')" class="hover:text-tmOrange transition">建議行程</button>
+                <a href="#faq" class="hover:text-tmOrange transition">常見問題</a>
+                <button onclick="toggleModal('modal-choice')" class="bg-tmOrange text-white px-6 py-2 rounded-full font-bold shadow-md hover:scale-105 transition transform">立即預約</button>
+            </div>
+        </div>
+    </nav>
+
+    <header class="relative h-[70vh] md:h-[85vh] flex items-center justify-center text-center bg-tmDeepGreen overflow-hidden">
+        <div class="absolute inset-0 z-0 zoom-cursor" onclick="openImageModal('images/hero-image.jpg')">
+            <img src="images/hero-image.jpg" class="w-full h-full object-cover opacity-70 transition duration-700 hover:scale-105" alt="Hero Background">
+            <div class="absolute inset-0 bg-gradient-to-b from-black/40 via-transparent to-black/50 pointer-events-none"></div>
+        </div>
+
+        <div class="relative z-20 px-6 max-w-4xl pointer-events-none">
+            <div class="pointer-events-auto">
+                <div class="bg-white/20 backdrop-blur-md text-white px-4 py-1 inline-block rounded-md mb-6 font-bold tracking-widest text-xs md:text-sm border border-white/30">PHU QUOC SPECIALIST</div>
+                <h1 class="text-4xl md:text-7xl font-black text-white mb-6 drop-shadow-2xl leading-tight">為您採集旅行的<br><span class="text-tmOrange">純粹風味</span></h1>
+                <p class="text-white text-lg md:text-xl font-medium tracking-widest mb-10 opacity-95 drop-shadow-lg">13 年在地功力 • 專屬客製規劃</p>
+                <div class="flex flex-col sm:flex-row gap-6 justify-center">
+                    <button onclick="toggleModal('modal-itinerary')" class="bg-white text-tmDeepGreen px-12 py-4 rounded-full font-black shadow-xl hover:bg-tmOrange hover:text-white transition-all transform hover:scale-105 min-w-[240px]">看建議行程</button>
+                </div>
+            </div>
+        </div>
+        <div class="absolute bottom-6 right-6 z-30 text-white/50 text-xs hidden md:block pointer-events-none">
+            <i class="fa-solid fa-magnifying-glass-plus mr-1"></i> 點擊背景查看全圖
+        </div>
+    </header>
+
+    <section id="services" class="py-24 bg-tmGreen/10">
+        <div class="max-w-7xl mx-auto px-6 text-center">
+            <h2 class="text-3xl font-black text-tmDeepGreen mb-16">專業旅遊服務</h2>
+            <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+                <div class="bg-white p-8 rounded-3xl shadow-sm border-t-4 border-tmOrange hover:shadow-lg transition">
+                    <i class="fa-solid fa-car text-tmOrange text-3xl mb-4"></i>
+                    <h4 class="font-bold text-lg mb-2 text-tmDeepGreen">私人包車服務</h4>
+                    <p class="text-xs text-slate-500">專業中文司機與多樣車型選擇。</p>
+                </div>
+                <div class="bg-white p-8 rounded-3xl shadow-sm border-t-4 border-tmOrange hover:shadow-lg transition">
+                    <i class="fa-solid fa-ticket text-tmOrange text-3xl mb-4"></i>
+                    <h4 class="font-bold text-lg mb-2 text-tmDeepGreen">全島門票代訂</h4>
+                    <p class="text-xs text-slate-500">免排隊更優惠，透明預算規劃。</p>
+                </div>
+                <div class="bg-white p-8 rounded-3xl shadow-sm border-t-4 border-tmOrange hover:shadow-lg transition">
+                    <i class="fa-solid fa-map-marked-alt text-tmOrange text-3xl mb-4"></i>
+                    <h4 class="font-bold text-lg mb-2 text-tmDeepGreen">客製行程規劃</h4>
+                    <p class="text-xs text-slate-500">依據需求量身打造深度動線。</p>
+                </div>
+                <div class="bg-white p-8 rounded-3xl shadow-sm border-t-4 border-tmOrange hover:shadow-lg transition">
+                    <i class="fa-solid fa-utensils text-tmOrange text-3xl mb-4"></i>
+                    <h4 class="font-bold text-lg mb-2 text-tmDeepGreen">私房美食地圖</h4>
+                    <p class="text-xs text-slate-500">13年在地吃貨，帶您品嚐純粹風味。</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="attractions" class="py-24 max-w-7xl mx-auto px-6">
+        <h2 class="text-3xl font-black text-tmDeepGreen mb-16 text-center">富國島必去名勝</h2>
+        <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+            <div class="bg-white rounded-3xl overflow-hidden shadow-sm border hover:shadow-xl transition group">
+                <div class="h-48 overflow-hidden zoom-cursor" onclick="openImageModal('images/grand-world.png.jpg')">
+                    <img src="images/grand-world.png.jpg" class="w-full h-full object-cover group-hover:scale-110 transition duration-500">
+                </div>
+                <div class="p-6">
+                    <h3 class="font-bold text-tmDeepGreen mb-2">富國大世界</h3>
+                    <p class="text-xs text-slate-500 leading-relaxed">24小時不夜城，威尼斯運河與竹屋建築所在地。</p>
+                </div>
+            </div>
+            <div class="bg-white rounded-3xl overflow-hidden shadow-sm border hover:shadow-xl transition group">
+                <div class="h-48 overflow-hidden zoom-cursor" onclick="openImageModal('images/cable-car.jpg')">
+                    <img src="images/cable-car.jpg" class="w-full h-full object-cover group-hover:scale-110 transition duration-500">
+                </div>
+                <div class="p-6">
+                    <h3 class="font-bold text-tmDeepGreen mb-2">跨海纜車</h3>
+                    <p class="text-xs text-slate-500 leading-relaxed">世界最長跨海纜車，俯瞰碧綠海域直達香島。</p>
+                </div>
+            </div>
+            <div class="bg-white rounded-3xl overflow-hidden shadow-sm border hover:shadow-xl transition group">
+                <div class="h-48 overflow-hidden zoom-cursor" onclick="openImageModal('images/vinwonders.jpeg')">
+                    <img src="images/vinwonders.jpeg" class="w-full h-full object-cover group-hover:scale-110 transition duration-500">
+                </div>
+                <div class="p-6">
+                    <h3 class="font-bold text-tmDeepGreen mb-2">珍珠樂園</h3>
+                    <p class="text-xs text-slate-500 leading-relaxed">越南最大主題樂園，夢幻城堡與巨龜水族館。</p>
+                </div>
+            </div>
+            <div class="bg-white rounded-3xl overflow-hidden shadow-sm border hover:shadow-xl transition group">
+                <div class="h-48 overflow-hidden zoom-cursor" onclick="openImageModal('images/night-market.jpg')">
+                    <img src="images/night-market.jpg" class="w-full h-full object-cover group-hover:scale-110 transition duration-500">
+                </div>
+                <div class="p-6">
+                    <h3 class="font-bold text-tmDeepGreen mb-2">陽東夜市</h3>
+                    <p class="text-xs text-slate-500 leading-relaxed">島上美食核心，新鮮海鮮與道地小吃齊聚。</p>
+                </div>
+            </div>
+            <div class="bg-white rounded-3xl overflow-hidden shadow-sm border hover:shadow-xl transition group">
+                <div class="h-48 overflow-hidden zoom-cursor" onclick="openImageModal('images/sunset-town.jpg')">
+                    <img src="images/sunset-town.jpg" class="w-full h-full object-cover group-hover:scale-110 transition duration-500">
+                </div>
+                <div class="p-6">
+                    <h3 class="font-bold text-tmDeepGreen mb-2">日落小鎮</h3>
+                    <p class="text-xs text-slate-500 leading-relaxed">地中海風格建築，親吻橋上捕捉絕美日落。</p>
+                </div>
+            </div>
+            <div class="bg-white rounded-3xl overflow-hidden shadow-sm border hover:shadow-xl transition group">
+                <div class="h-48 overflow-hidden zoom-cursor" onclick="openImageModal('images/diving.jpg')">
+                    <img src="images/diving.jpg" class="w-full h-full object-cover group-hover:scale-110 transition duration-500">
+                </div>
+                <div class="p-6">
+                    <h3 class="font-bold text-tmDeepGreen mb-2">跳島行程</h3>
+                    <p class="text-xs text-slate-500 leading-relaxed">深入指甲島與雲腿島，享受無人島午餐與清澈海水。</p>
+                </div>
+            </div>
+            <div class="bg-white rounded-3xl overflow-hidden shadow-sm border hover:shadow-xl transition group">
+                <div class="h-48 overflow-hidden zoom-cursor" onclick="openImageModal('images/starfish.jpg')">
+                    <img src="images/starfish.jpg" class="w-full h-full object-cover group-hover:scale-110 transition duration-500">
+                </div>
+                <div class="p-6">
+                    <h3 class="font-bold text-tmDeepGreen mb-2">海星沙灘</h3>
+                    <p class="text-xs text-slate-500 leading-relaxed">北島秘境，清澈海水中與紅海星近距離接觸。</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="calculator" class="py-24 bg-slate-50">
+        <div class="max-w-5xl mx-auto px-6">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl font-black text-tmDeepGreen mb-4">預算初步試算</h2>
+                <p class="text-slate-500 italic">依照您的需求，系統將自動匹配車型與概算</p>
+            </div>
+            <div class="bg-white rounded-[3rem] p-8 md:p-12 shadow-xl border border-slate-100 flex flex-col lg:flex-row gap-12">
+                <div class="lg:w-1/2 space-y-6">
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <label class="block font-bold text-tmDeepGreen mb-2 text-sm">預計人數</label>
+                            <input type="number" id="calc-pax" oninput="updateEstimate()" placeholder="人數" class="w-full px-6 py-4 rounded-2xl border border-slate-200 focus:ring-2 focus:ring-tmOrange outline-none">
+                        </div>
+                        <div>
+                            <label class="block font-bold text-tmDeepGreen mb-2 text-sm">用車天數</label>
+                            <input type="number" id="calc-days" oninput="updateEstimate()" placeholder="天數" class="w-full px-6 py-4 rounded-2xl border border-slate-200 focus:ring-2 focus:ring-tmOrange outline-none">
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block font-bold text-tmDeepGreen mb-2 text-sm">住宿預算 (每房每晚)</label>
+                        <select id="calc-hotel" onchange="updateEstimate()" class="w-full px-6 py-4 rounded-2xl border border-slate-200 bg-white">
+                            <option value="0">不含住宿 / 自行訂房</option>
+                            <option value="1600000">VND 160萬 (約 NT$2,000 經濟精選)</option>
+                            <option value="2800000">VND 280萬 (約 NT$3,500 CP值首選 - 推薦！)</option>
+                            <option value="5000000">VND 500萬 (約 NT$6,250 高端享受)</option>
+                            <option value="8000000">VND 800萬 (約 NT$10,000+ 頂級奢華 / Villa)</option>
+                        </select>
+                    </div>
+                    <div class="grid grid-cols-1 gap-3 text-sm">
+                        <label class="flex items-center bg-slate-50 p-4 rounded-2xl cursor-pointer hover:bg-tmGreen/10 transition">
+                            <input type="checkbox" id="t-vin" onchange="updateEstimate()" class="w-5 h-5 accent-tmOrange mr-3">
+                            <span>珍珠雙園套票 (VND 150萬/人)</span>
+                        </label>
+                        <label class="flex items-center bg-slate-50 p-4 rounded-2xl cursor-pointer hover:bg-tmGreen/10 transition">
+                            <input type="checkbox" id="t-cable" onchange="updateEstimate()" class="w-5 h-5 accent-tmOrange mr-3">
+                            <span>香島纜車 (VND 85萬/人)</span>
+                        </label>
+                        <label class="flex items-center bg-slate-50 p-4 rounded-2xl cursor-pointer hover:bg-tmGreen/10 transition">
+                            <input type="checkbox" id="t-kiss" onchange="updateEstimate()" class="w-5 h-5 accent-tmOrange mr-3">
+                            <span>海之吻門票 (VND 75萬/人)</span>
+                        </label>
+                        <label class="flex items-center bg-slate-50 p-4 rounded-2xl cursor-pointer hover:bg-tmGreen/10 transition">
+                            <input type="checkbox" id="e-starfish" onchange="updateEstimate()" class="w-5 h-5 accent-tmOrange mr-3">
+                            <span>北島跨區加費 (VND 30萬/車)</span>
+                        </label>
+                    </div>
+                </div>
+                <div id="calc-result-box" class="lg:w-1/2 bg-tmDeepGreen rounded-[2.5rem] p-10 text-white flex flex-col justify-between opacity-20 transition-opacity duration-500 shadow-2xl">
+                    <div>
+                        <h4 class="text-2xl font-black mb-6">預估行程概算</h4>
+                        <div class="space-y-4 mb-8">
+                            <div class="flex justify-between border-b border-white/10 pb-2 text-sm">
+                                <span class="opacity-60">自動匹配車型</span>
+                                <span id="res-car" class="font-bold text-tmOrange">-</span>
+                            </div>
+                            <div class="flex justify-between border-b border-white/10 pb-2 text-sm">
+                                <span class="opacity-60">幣別</span>
+                                <span class="font-bold">VND 越南盾</span>
+                            </div>
+                        </div>
+                        <div class="text-4xl font-black text-tmOrange" id="res-amount">0</div>
+                        <p class="text-[10px] opacity-40 mt-4 leading-relaxed italic">* 此為系統概算，最終報價依規劃師手動核算為準。</p>
+                    </div>
+                    <button onclick="toggleModal('modal-choice')" class="mt-8 w-full py-5 bg-white text-tmDeepGreen font-black rounded-2xl hover:bg-tmOrange hover:text-white transition transform">獲取正式報價</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="booking-section" class="py-24 max-w-7xl mx-auto px-6">
+        <div class="bg-tmDeepGreen rounded-[3rem] shadow-2xl overflow-hidden flex flex-col lg:flex-row">
+            <div class="p-12 lg:w-1/2 text-white">
+                <h3 class="text-4xl font-black mb-6 leading-tight">開始客製<br>您的旅程</h3>
+                <p class="text-tmGreen text-lg mb-8 leading-relaxed">只需5分鐘填寫需求，讓我們用 13 年的在地專業為您省下排隊與尋路時間。</p>
+                <div class="space-y-4">
+                    <div class="flex items-center"><i class="fa-solid fa-check text-tmOrange mr-3"></i> 收到預約單後，將盡速與您做初步報價</div>
+                    <div class="flex items-center"><i class="fa-solid fa-check text-tmOrange mr-3"></i> 專屬中文客服對接</div>
+                </div>
+            </div>
+            <div class="p-12 lg:w-1/2 bg-white flex flex-col justify-center items-center text-center">
+                <i class="fa-solid fa-paper-plane text-5xl text-tmOrange mb-6"></i>
+                <h4 class="text-2xl font-bold text-tmDeepGreen mb-4">準備好打造夢想行程了嗎？</h4>
+                <button onclick="toggleModal('modal-choice')" class="w-full max-w-sm py-5 bg-tmOrange text-white font-black text-xl rounded-2xl shadow-xl hover:scale-105 transition transform">點此填寫需求單</button>
+            </div>
+        </div>
+    </section>
+
+    <section id="faq" class="py-24 max-w-4xl mx-auto px-6">
+        <h2 class="text-3xl font-black text-center mb-12 text-tmDeepGreen">常見問題 Q&A</h2>
+        <div class="space-y-4">
+            <details class="bg-slate-50 p-6 rounded-2xl cursor-pointer shadow-sm group">
+                <summary class="font-bold flex justify-between items-center list-none">1.重要!! 行程可以隨時調整嗎？  <i class="fa-solid fa-plus group-open:rotate-45 transition"></i></summary>
+                <p class="mt-4 text-sm text-slate-500 leading-relaxed">客製化行程的優勢在於彈性，送出預約表單後，如遇狀況，請於出發日前三至七天與我們溝通調整。建議送出前先確認初步規劃。</p>
+            </details>
+            <details class="bg-slate-50 p-6 rounded-2xl cursor-pointer shadow-sm group">
+                <summary class="font-bold flex justify-between items-center list-none">2. 什麼時候去天氣最好？ <i class="fa-solid fa-plus group-open:rotate-45 transition"></i></summary>
+                <p class="mt-4 text-sm text-slate-500 leading-relaxed">11 月至 4 月是乾季，天氣穩定且海水最透，是最佳旅遊時機。</p>
+            </details>
+            <details class="bg-slate-50 p-6 rounded-2xl cursor-pointer shadow-sm group">
+                <summary class="font-bold flex justify-between items-center list-none">3. 如何兌換越南盾？ <i class="fa-solid fa-plus group-open:rotate-45 transition"></i></summary>
+                <p class="mt-4 text-sm text-slate-500 leading-relaxed">可攜帶美金或台幣到機場、當地金店兌換。Grab 叫車可綁台灣信用卡，非常便利。</p>
+            </details>
+            <details class="bg-slate-50 p-6 rounded-2xl cursor-pointer shadow-sm group">
+                <summary class="font-bold flex justify-between items-center list-none">4. 當地電壓與插座？ <i class="fa-solid fa-plus group-open:rotate-45 transition"></i></summary>
+                <p class="mt-4 text-sm text-slate-500 leading-relaxed">220V 電壓，插座為兩孔圓形或扁形通用，一般台灣充電器可直接使用。</p>
+            </details>
+            <details class="bg-slate-50 p-6 rounded-2xl cursor-pointer shadow-sm group">
+                <summary class="font-bold flex justify-between items-center list-none">5. 富國島治安好嗎？ <i class="fa-solid fa-plus group-open:rotate-45 transition"></i></summary>
+                <p class="mt-4 text-sm text-slate-500 leading-relaxed">治安極佳且島民友善，是越南最安全的地區之一。</p>
+            </details>
+            <details class="bg-slate-50 p-6 rounded-2xl cursor-pointer shadow-sm group">
+                <summary class="font-bold flex justify-between items-center list-none">6. 需要給小費嗎？ <i class="fa-solid fa-plus group-open:rotate-45 transition"></i></summary>
+                <p class="mt-4 text-sm text-slate-500 leading-relaxed">非強迫性，但建議飯店搬運或床頭可給 20,000~50,000 越南盾表達謝意。</p>
+            </details>
+            <details class="bg-slate-50 p-6 rounded-2xl cursor-pointer shadow-sm group">
+                <summary class="font-bold flex justify-between items-center list-none">7. 富國島需要簽證嗎？ <i class="fa-solid fa-plus group-open:rotate-45 transition"></i></summary>
+                <p class="mt-4 text-sm text-slate-500 leading-relaxed">直飛富國島免簽證 30 天。若經由河內或胡志明轉機則需電子簽 (E-Visa)。</p>
+            </details>
+            <details class="bg-slate-50 p-6 rounded-2xl cursor-pointer shadow-sm group">
+                <summary class="font-bold flex justify-between items-center list-none">8. 適合帶小孩去嗎？ <i class="fa-solid fa-plus group-open:rotate-45 transition"></i></summary>
+                <p class="mt-4 text-sm text-slate-500導致的領頭。適合！有無障礙設施良好的樂園與動物園，是親子首選。</p>
+            </details>
+            <details class="bg-slate-50 p-6 rounded-2xl cursor-pointer shadow-sm group">
+                <summary class="font-bold flex justify-between items-center list-none">9. 網路卡怎麼買？ <i class="fa-solid fa-plus group-open:rotate-45 transition"></i></summary>
+                <p class="mt-4 text-sm text-slate-500 leading-relaxed">建議自行購買網路卡或機場抵達後現場購買也非常方便。</p>
+            </details>
+            <details class="bg-slate-50 p-6 rounded-2xl cursor-pointer shadow-sm group">
+                <summary class="font-bold flex justify-between items-center list-none">10. 有緊急諮詢管道嗎？ <i class="fa-solid fa-plus group-open:rotate-45 transition"></i></summary>
+                <p class="mt-4 text-sm text-slate-500 leading-relaxed">如遇緊急狀況，凡預約客製服務，我們提供 24 小時中文緊急聯絡電話。</p>
+            </details>
+        </div>
+    </section>
+
+    <footer class="bg-tmDeepGreen text-white py-12 px-6 text-center">
+        <div class="text-2xl font-black mb-4 tracking-tight">TAMARIND TRAVEL</div>
+        <p class="text-tmGreen opacity-80 text-sm mb-8">您的富國島深度旅遊工作室</p>
+        <p class="text-[10px] opacity-30">&copy; 2026 Tamarind Travel. All Rights Reserved.</p>
+    </footer>
+
+    <div class="fixed bottom-8 right-8 z-[100] flex flex-col gap-3">
+        <a href="https://www.facebook.com/TamarindTravelPQ?mibextid=wwXIfr" target="_blank" class="line-float" style="animation-delay: 0.1s;">
+            <div class="bg-[#1877F2] p-3 rounded-full shadow-xl flex items-center justify-center border-4 border-white hover:scale-110 transition transform">
+                <i class="fa-brands fa-facebook-f text-white text-xl"></i>
+            </div>
+        </a>
+        <button onclick="alert('請搜尋 WeChat ID: lkwg2002')" class="line-float" style="animation-delay: 0.2s;">
+            <div class="bg-[#07C160] p-3 rounded-full shadow-xl flex items-center justify-center border-4 border-white hover:scale-110 transition transform">
+                <i class="fa-brands fa-weixin text-white text-xl"></i>
+            </div>
+        </button>
+        <a href="https://wa.me/886978099267" target="_blank" class="line-float" style="animation-delay: 0.3s;">
+            <div class="bg-[#25D366] p-3 rounded-full shadow-xl flex items-center justify-center border-4 border-white hover:scale-110 transition transform">
+                <i class="fa-brands fa-whatsapp text-white text-xl"></i>
+            </div>
+        </a>
+        <a href="https://lin.ee/hJmgHuuh" target="_blank" class="line-float">
+            <div class="bg-[#06C755] p-4 rounded-full shadow-2xl flex items-center justify-center border-4 border-white hover:scale-110 transition transform">
+                <i class="fa-brands fa-line text-white text-3xl"></i>
+            </div>
+        </a>
+    </div>
+
+    <div id="modal-about" class="fixed inset-0 z-[110] hidden items-center justify-center p-4">
+        <div class="absolute inset-0 bg-black/60 backdrop-blur-sm" onclick="toggleModal('modal-about')"></div>
+        <div class="bg-white w-full max-w-2xl rounded-[2.5rem] relative z-10 overflow-hidden shadow-2xl fade-in border-t-[12px] border-tmGreen">
+            <div class="p-10">
+                <div class="flex justify-between items-start mb-6">
+                    <h3 class="text-2xl font-black text-tmDeepGreen">關於 Tamarind Travel</h3>
+                    <button onclick="toggleModal('modal-about')" class="text-slate-400 hover:text-tmOrange text-2xl font-black">&times;</button>
+                </div>
+                <div class="text-slate-600 leading-relaxed space-y-5 text-lg">
+                    <p>創辦人的越南故事始於 <span class="text-tmDeepGreen font-bold">河內 36 古街</span>，在那裡經營旅行社與餐廳的日子裡，用了 <span class="bg-tmOrange/20 px-1 font-bold">13 年的光陰</span>，自駕跑遍了越南的大街小巷，挖掘地圖上找不到的秘境。</p>
+                    <p>現在定居在 <span class="text-tmDeepGreen font-bold">富國島 (Phu Quoc)</span>。這裡的每一個景點、餐廳，都是親自走訪後才敢推薦給各位的真心話！</p>
+                </div>
+                <button onclick="toggleModal('modal-about')" class="mt-10 w-full py-4 bg-tmDeepGreen text-white font-bold rounded-2xl">開始探索</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="modal-itinerary" class="fixed inset-0 z-[110] hidden items-center justify-center p-4">
+        <div class="absolute inset-0 bg-black/60 backdrop-blur-sm" onclick="toggleModal('modal-itinerary')"></div>
+        <div class="bg-white w-full max-w-3xl rounded-[2.5rem] relative z-10 overflow-hidden shadow-2xl fade-in max-h-[85vh] overflow-y-auto">
+            <div class="bg-tmOrange p-8 text-white sticky top-0 flex justify-between items-center z-20">
+                <h3 class="text-2xl font-black italic">建議行程 (精選五大系列)</h3>
+                <button onclick="toggleModal('modal-itinerary')" class="text-3xl">&times;</button>
+            </div>
+            <div class="p-10 space-y-8">
+                <div class="group border-l-4 border-tmGreen pl-6 py-2">
+                    <h4 class="font-black text-xl text-tmDeepGreen mb-2">【網美朝聖】纜車與日落小鎮一日遊</h4>
+                    <p class="text-slate-500 text-sm">世界最長纜車、香島水樂園、親吻橋賞最美夕陽。</p>
+                </div>
+                <div class="group border-l-4 border-tmGreen pl-6 py-2">
+                    <h4 class="font-black text-xl text-tmDeepGreen mb-2">【親子歡樂】珍珠主題樂園全日探索</h4>
+                    <p class="text-slate-500 text-sm">珍珠樂園 + 野生動物園，最適合帶小朋友徹底放電。</p>
+                </div>
+                <div class="group border-l-4 border-tmGreen pl-6 py-2">
+                    <h4 class="font-black text-xl text-tmDeepGreen mb-2">【海洋呼吸】三島跳島與浮潛之旅</h4>
+                    <p class="text-slate-500 text-sm">深入指甲島與雲腿島，享受無人島午餐與清澈海水。</p>
+                </div>
+                <div class="group border-l-4 border-tmGreen pl-6 py-2">
+                    <h4 class="font-black text-xl text-tmDeepGreen mb-2">【北島慢活】海星沙灘與大世界不夜城</h4>
+                    <p class="text-slate-500 text-sm">北島原始美景與大世界璀璨夜晚的雙重感官體驗。</p>
+                </div>
+                <div class="group border-l-4 border-tmGreen pl-6 py-2">
+                    <h4 class="font-black text-xl text-tmDeepGreen mb-2">【老饕私房】當地市場美食與夕陽晚宴</h4>
+                    <p class="text-slate-500 text-sm">跟著創辦人尋找道地風味，避開地雷，只吃真正的好味道。</p>
+                </div>
+                <button onclick="toggleModal('modal-choice'); toggleModal('modal-itinerary');" class="mt-4 w-full py-4 bg-tmDeepGreen text-white font-bold rounded-2xl">立即聯繫我們</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="modal-choice" class="fixed inset-0 z-[130] hidden items-center justify-center p-4">
+        <div class="absolute inset-0 bg-black/70 backdrop-blur-sm" onclick="toggleModal('modal-choice')"></div>
+        <div class="bg-white w-full max-w-2xl rounded-[2.5rem] relative z-10 overflow-hidden shadow-2xl fade-in border-t-[12px] border-tmOrange text-center">
+            <div class="p-10">
+                <h3 class="text-2xl font-black text-tmDeepGreen mb-2">請選擇服務類型</h3>
+                <p class="text-slate-500 mb-8 text-sm">為了提供更精準的服務，請告訴我們您的規劃進度</p>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <button onclick="handleFormChoice('inquiry')" class="p-6 border-2 border-slate-100 rounded-3xl hover:border-tmOrange hover:bg-tmOrange/5 transition group text-left">
+                        <div class="bg-slate-100 group-hover:bg-tmOrange text-tmDeepGreen group-hover:text-white w-12 h-12 rounded-2xl flex items-center justify-center mb-4 transition">
+                            <i class="fa-solid fa-calculator text-xl"></i>
+                        </div>
+                        <div class="font-black text-tmDeepGreen text-lg mb-1">初步詢價單</div>
+                        <div class="text-xs text-slate-400">尚未確定日期，想了解預算與項目。</div>
+                    </button>
+                    <button onclick="handleFormChoice('booking')" class="p-6 border-2 border-slate-100 rounded-3xl hover:border-tmGreen hover:bg-tmGreen/5 transition group text-left">
+                        <div class="bg-slate-100 group-hover:bg-tmGreen text-tmDeepGreen group-hover:text-white w-12 h-12 rounded-2xl flex items-center justify-center mb-4 transition">
+                            <i class="fa-solid fa-calendar-check text-xl"></i>
+                        </div>
+                        <div class="font-black text-tmDeepGreen text-lg mb-1">正式預約單</div>
+                        <div class="text-xs text-slate-400">已確定日期，準備進入行程規劃。</div>
+                    </button>
+                </div>
+                <button onclick="toggleModal('modal-choice')" class="mt-8 text-slate-400 hover:text-tmDeepGreen text-sm font-bold">先回頁面看看</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="modal-form" class="fixed inset-0 z-[120] hidden items-center justify-center p-4">
+        <div class="absolute inset-0 bg-black/70 backdrop-blur-sm" onclick="toggleModal('modal-form')"></div>
+        <div class="bg-white w-full max-w-4xl h-[90vh] rounded-[2.5rem] relative z-10 overflow-hidden shadow-2xl fade-in flex flex-col">
+            <div class="bg-tmDeepGreen p-6 text-white flex justify-between items-center">
+                <h3 class="font-bold flex items-center"><i class="fa-solid fa-file-signature mr-3"></i> 提交旅行願望清單</h3>
+                <button onclick="toggleModal('modal-form')" class="text-3xl">&times;</button>
+            </div>
+            <div class="flex-grow">
+                <iframe id="form-iframe" src="" class="w-full h-full" frameborder="0">載入中…</iframe>
+            </div>
+        </div>
+    </div>
+
+    <div id="modal-image" class="fixed inset-0 z-[200] hidden items-center justify-center p-4 bg-black/90 backdrop-blur-md" onclick="this.classList.add('hidden'); document.body.style.overflow='auto';">
+        <img id="full-res-image" src="" class="max-w-full max-h-full rounded-lg shadow-2xl fade-in object-contain">
+    </div>
+
+</body>
+</html>
