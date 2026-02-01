@@ -40,11 +40,9 @@
             
             if (type === 'inquiry') {
                 message = "【初步詢價確認】\n您即將填寫初步詢價單，適合尚未確定日期、想了解預算的貴賓。";
-                // 使用您提供的新詢價單網址
                 targetUrl = "https://docs.google.com/forms/d/e/1FAIpQLSfZ3kfeZKvvMZ8JQzVSaOy91o-VM8qQIncZxvrLOg8a9-kk6w/viewform?embedded=true";
             } else {
                 message = "【正式預約確認】\n您即將填寫正式預約單，適合已確定日期、準備進入行程規劃的貴賓。";
-                // 保留原本的預約單網址
                 targetUrl = "https://docs.google.com/forms/d/e/1FAIpQLScpxnRLWPkm6U1Bx4XHS2_7Ob7k-CSJuJiqbRVzW9yoR35ZOQ/viewform?embedded=true";
             }
 
@@ -121,6 +119,8 @@
         }
         .line-float { animation: float 3s infinite ease-in-out; }
         .zoom-cursor { cursor: zoom-in; }
+        .custom-scroll::-webkit-scrollbar { width: 6px; }
+        .custom-scroll::-webkit-scrollbar-thumb { background: #9EBC9F; border-radius: 10px; }
     </style>
 </head>
 <body class="bg-white text-slate-800">
@@ -346,7 +346,12 @@
     </section>
 
     <section id="faq" class="py-24 max-w-4xl mx-auto px-6">
-        <h2 class="text-3xl font-black text-center mb-12 text-tmDeepGreen">常見問題 Q&A</h2>
+        <div class="flex flex-col md:flex-row justify-between items-center mb-12 gap-4">
+            <h2 class="text-3xl font-black text-tmDeepGreen">常見問題 Q&A</h2>
+            <button onclick="toggleModal('modal-faq-all')" class="text-tmOrange font-bold hover:text-tmDeepGreen transition flex items-center gap-2 border-b-2 border-tmOrange pb-1">
+                查看更多百科 <i class="fa-solid fa-plus-circle"></i>
+            </button>
+        </div>
         <div class="space-y-4">
             <details class="bg-slate-50 p-6 rounded-2xl cursor-pointer shadow-sm group">
                 <summary class="font-bold flex justify-between items-center list-none">1.重要!! 行程可以隨時調整嗎？  <i class="fa-solid fa-plus group-open:rotate-45 transition"></i></summary>
@@ -378,7 +383,7 @@
             </details>
             <details class="bg-slate-50 p-6 rounded-2xl cursor-pointer shadow-sm group">
                 <summary class="font-bold flex justify-between items-center list-none">8. 適合帶小孩去嗎？ <i class="fa-solid fa-plus group-open:rotate-45 transition"></i></summary>
-                <p class="mt-4 text-sm text-slate-500 leading-relaxed">適合！有無障礙設施良好的樂園與動物園，是親子首選。</p>
+                <p class="mt-4 text-sm text-slate-500">適合！有無障礙設施良好的樂園與動物園，是親子首選。</p>
             </details>
             <details class="bg-slate-50 p-6 rounded-2xl cursor-pointer shadow-sm group">
                 <summary class="font-bold flex justify-between items-center list-none">9. 網路卡怎麼買？ <i class="fa-solid fa-plus group-open:rotate-45 transition"></i></summary>
@@ -403,7 +408,7 @@
                 <i class="fa-brands fa-facebook-f text-white text-xl"></i>
             </div>
         </a>
-        <button onclick="alert('請搜尋 WeChat ID: yoshilin05')" class="line-float" style="animation-delay: 0.2s;">
+        <button onclick="alert('請搜尋 WeChat ID: soyuuuuu')" class="line-float" style="animation-delay: 0.2s;">
             <div class="bg-[#07C160] p-3 rounded-full shadow-xl flex items-center justify-center border-4 border-white hover:scale-110 transition transform">
                 <i class="fa-brands fa-weixin text-white text-xl"></i>
             </div>
@@ -512,6 +517,42 @@
 
     <div id="modal-image" class="fixed inset-0 z-[200] hidden items-center justify-center p-4 bg-black/90 backdrop-blur-md" onclick="this.classList.add('hidden'); document.body.style.overflow='auto';">
         <img id="full-res-image" src="" class="max-w-full max-h-full rounded-lg shadow-2xl fade-in object-contain">
+    </div>
+
+    <div id="modal-faq-all" class="fixed inset-0 z-[150] hidden items-center justify-center p-4">
+        <div class="absolute inset-0 bg-black/70 backdrop-blur-sm" onclick="toggleModal('modal-faq-all')"></div>
+        <div class="bg-white w-full max-w-5xl h-[90vh] rounded-[2.5rem] relative z-10 overflow-hidden shadow-2xl fade-in flex flex-col">
+            <div class="bg-tmDeepGreen p-6 text-white flex justify-between items-center sticky top-0 z-30 shadow-lg">
+                <h3 class="font-bold flex items-center text-lg"><i class="fa-solid fa-book-open mr-3 text-tmOrange"></i> 富國島旅遊全百科 (50項 Q&A)</h3>
+                <button onclick="toggleModal('modal-faq-all')" class="text-3xl hover:text-tmOrange transition">&times;</button>
+            </div>
+            <div class="flex-grow overflow-y-auto p-6 md:p-10 bg-slate-50 custom-scroll">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <div class="space-y-4">
+                        <h4 class="text-tmDeepGreen font-black text-xl mb-4 border-l-4 border-tmOrange pl-4">一、入境簽證與交通</h4>
+                        <div class="bg-white p-5 rounded-2xl shadow-sm"><p class="font-bold mb-1">Q1: 前往富國島需要簽證嗎？</p><p class="text-sm text-slate-500 leading-relaxed">不需要。富國島是越南唯一免簽證區，直飛抵達可享有 30 天免簽。</p></div>
+                        <div class="bg-white p-5 rounded-2xl shadow-sm"><p class="font-bold mb-1">Q2: 胡志明轉機去富國島需要簽證嗎？</p><p class="text-sm text-slate-500 leading-relaxed">聯程機票不需入境領行李者免簽；若需換航廈領行李則需電子簽。</p></div>
+                        <div class="bg-white p-5 rounded-2xl shadow-sm"><p class="font-bold mb-1">Q3: 私人包車含油錢司機費嗎？</p><p class="text-sm text-slate-500 leading-relaxed">是的，我們的包車報價已含車輛、司機、油費與過路費，無隱藏費用。</p></div>
+                        <div class="bg-white p-5 rounded-2xl shadow-sm"><p class="font-bold mb-1">Q4: 機場接送司機會在哪等？</p><p class="text-sm text-slate-500 leading-relaxed">司機會在入境大廳出口處舉牌等候您的姓名。</p></div>
+                        <div class="bg-white p-5 rounded-2xl shadow-sm"><p class="font-bold mb-1">Q5: 可以租機車嗎？</p><p class="text-sm text-slate-500 leading-relaxed">可以，但需有國際駕照且需注意當地交通習慣較為混亂。</p></div>
+                        <div class="bg-white p-5 rounded-2xl shadow-sm"><p class="font-bold mb-1">Q6: 當地 Grab 方便嗎？</p><p class="text-sm text-slate-500 leading-relaxed">市區方便，但長程（如北島）建議預約包車，以免叫不到回程車。</p></div>
+                    </div>
+                    <div class="space-y-4">
+                        <h4 class="text-tmDeepGreen font-black text-xl mb-4 border-l-4 border-tmOrange pl-4">二、行前準備百科</h4>
+                        <div class="bg-white p-5 rounded-2xl shadow-sm"><p class="font-bold mb-1">Q7: 什麼時候去天氣最好？</p><p class="text-sm text-slate-500 leading-relaxed">11月到隔年4月是乾季，海水最藍，是最佳旅遊月份。</p></div>
+                        <div class="bg-white p-5 rounded-2xl shadow-sm"><p class="font-bold mb-1">Q8: 越南盾怎麼換最划算？</p><p class="text-sm text-slate-500 leading-relaxed">攜帶美金大鈔到當地金店兌換通常比機場匯率更好。</p></div>
+                        <div class="bg-white p-5 rounded-2xl shadow-sm"><p class="font-bold mb-1">Q9: 當地電壓？</p><p class="text-sm text-slate-500 leading-relaxed">220V，插座多為雙孔圓形或扁形通用，不需帶轉接頭。</p></div>
+                        <div class="bg-white p-5 rounded-2xl shadow-sm"><p class="font-bold mb-1">Q10: 需要自備網路嗎？</p><p class="text-sm text-slate-500 leading-relaxed">建議在台灣買好 Viettel 網卡，當地訊號最穩定。</p></div>
+                        <div class="bg-white p-5 rounded-2xl shadow-sm"><p class="font-bold mb-1">Q11: 需給司機小費嗎？</p><p class="text-sm text-slate-500 leading-relaxed">非強迫，但對於服務優質的司機給予 2-5 萬盾是體面表現。</p></div>
+                        <div class="bg-white p-5 rounded-2xl shadow-sm"><p class="font-bold mb-1">Q12: 適合帶長輩小孩嗎？</p><p class="text-sm text-slate-500 leading-relaxed">非常適合，客製化行程不趕路，且島上無障礙設施日益完善。</p></div>
+                    </div>
+                    </div>
+                <div class="mt-12 bg-tmDeepGreen p-8 rounded-[3rem] text-white text-center">
+                    <p class="font-bold text-lg mb-4">篇幅有限，想看剩下 30+ 題細節與私房推薦？</p>
+                    <a href="https://lin.ee/hJmgHuuh" target="_blank" class="inline-block bg-tmOrange text-white px-10 py-4 rounded-full font-black shadow-xl hover:scale-105 transition">點此加 LINE 領取「富國島通」懶人包</a>
+                </div>
+            </div>
+        </div>
     </div>
 
 </body>
