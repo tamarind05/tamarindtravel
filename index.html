@@ -94,7 +94,7 @@
             if (pax <= 4) { carPrice = 1400000; carName = "一般 7 人座"; }
             else if (pax <= 7) { carPrice = 2200000; carName = "10 人保姆車"; }
             else if (pax <= 9) { carPrice = 2700000; carName = "12 人保姆車"; }
-            else if (pax <= 16) { carPrice = 3800000; carName = "18 人座中巴"; }
+            else if (pax <= 16) { carPrice = 2800000; carName = "18 人座中巴"; }
             else { carPrice = 5500000; carName = "29-45 人大巴士"; }
 
             let ticketTotal = 0;
@@ -113,7 +113,7 @@
             }
 
             const base = (carPrice * days) + (ticketTotal * pax) + extra + hotelTotal;
-            const rangeMax = Math.ceil((base * 1.1) / 10000) * 10000;
+            const rangeMax = Math.ceil((base * 1.25) / 10000) * 10000;
 
             document.getElementById('res-car').innerText = carName;
             document.getElementById('res-amount').innerText = `${base.toLocaleString()} ~ ${rangeMax.toLocaleString()}`;
