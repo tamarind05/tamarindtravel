@@ -189,15 +189,84 @@
             <i class="fa-solid fa-magnifying-glass-plus mr-1"></i> 點擊背景查看全圖
         </div>
     </header>
+<section id="itinerary-section" class="py-8 bg-slate-50 relative overflow-hidden">
+    <div class="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-4xl h-full pointer-events-none">
+        <div class="absolute -top-10 -left-10 w-32 h-32 bg-tmGreen/5 rounded-full blur-2xl animate-pulse"></div>
+        <div class="absolute -bottom-10 -right-10 w-32 h-32 bg-tmOrange/5 rounded-full blur-2xl animate-pulse" style="animation-delay: 2s;"></div>
+    </div>
 
+    <div class="max-w-5xl mx-auto px-4 relative z-10">
+        <div class="bg-white/80 backdrop-blur-sm rounded-[2rem] p-6 md:p-10 shadow-[0_10px_30px_-15px_rgba(0,0,0,0.08)] border border-white/60 relative overflow-hidden group hover:shadow-[0_20px_40px_-12px_rgba(0,0,0,0.12)] transition-all duration-500">
+            
+            <div class="absolute -right-6 -bottom-6 w-32 h-32 bg-slate-100/50 rounded-full flex items-center justify-center transition-transform duration-700 group-hover:scale-110 group-hover:-rotate-12">
+                <i class="fa-solid fa-map-location-dot text-slate-200 text-5xl"></i>
+            </div>
+            
+            <div class="relative z-10 flex flex-col md:flex-row items-center justify-between gap-6 md:gap-12 text-center md:text-left">
+                
+                <div class="flex-1">
+                    <div class="inline-flex items-center gap-2 px-2.5 py-0.5 bg-tmGreen/10 text-tmDeepGreen text-[10px] font-bold rounded-full mb-3 tracking-widest uppercase">
+                        <span class="relative flex h-2 w-2">
+                          <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-tmGreen opacity-75"></span>
+                          <span class="relative inline-flex rounded-full h-2 w-2 bg-tmGreen"></span>
+                        </span>
+                        Premium Selection
+                    </div>
+
+                    <h2 class="text-2xl md:text-3xl font-black text-tmDeepGreen mb-3 leading-tight">
+                        全越南VN <span class="text-tmOrange underline decoration-tmOrange/30 underline-offset-4">精選行程Featured Itineraries</span>
+                    </h2>
+                    
+                    <div class="max-w-xl">
+                        <h3 class="text-slate-700 font-bold text-base md:text-lg mb-1.5">
+                            北中南越在地團隊，對接最道地的感動
+                        </h3>
+                        <p class="text-slate-500 text-sm md:text-base leading-relaxed antialiased">
+                            越南的魅力不只是風景，更在於濃厚的人情與生活步調。讓我們帶路，將驚艷瞬息編織成您珍藏一生的旅行回憶。
+                        </p>
+                    </div>
+                </div>
+
+                <div class="shrink-0 w-full md:w-auto">
+                    <button onclick="toggleModal('modal-region-selector')" class="relative overflow-hidden group bg-tmDeepGreen text-white px-8 py-4 rounded-xl font-bold text-lg shadow-lg hover:bg-tmOrange transition-all duration-500 transform hover:-translate-y-1 flex items-center justify-center gap-3 w-full md:min-w-[200px]">
+                        <div class="absolute inset-0 w-1/2 h-full bg-white/20 -skew-x-[30deg] -translate-x-[150%] group-hover:translate-x-[250%] transition-transform duration-1000"></div>
+                        
+                        <i class="fa-solid fa-compass text-xl animate-spin-slow group-hover:animate-none"></i>
+                        <span>立即探索 Discover More</span>
+                        <i class="fa-solid fa-chevron-right text-xs group-hover:translate-x-1 transition-transform"></i>
+                    </button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</section>
+
+<style>
+    @keyframes spin-slow {
+        from { transform: rotate(0deg); }
+        to { transform: rotate(360deg); }
+    }
+    .animate-spin-slow {
+        animation: spin-slow 8s linear infinite;
+    }
+    /* 確保彈窗有關閉動畫 */
+    .fade-in {
+        animation: fadeIn 0.4s ease-out;
+    }
+    @keyframes fadeIn {
+        from { opacity: 0; transform: scale(0.95); }
+        to { opacity: 1; transform: scale(1); }
+    }
+</style>
     <section id="services" class="py-24 bg-tmGreen/10 text-center">
         <div class="max-w-7xl mx-auto px-6">
-            <h2 class="text-3xl font-black text-tmDeepGreen mb-16">專業旅遊服務</h2>
+            <h2 class="text-3xl font-black text-tmDeepGreen mb-16">富國島專業旅遊服務</h2>
             <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
                 <div class="bg-white p-8 rounded-3xl shadow-sm border-t-4 border-tmOrange hover:shadow-lg transition text-center">
                     <i class="fa-solid fa-car text-tmOrange text-3xl mb-4"></i>
                     <h4 class="font-bold text-lg mb-2 text-tmDeepGreen">私人包車服務</h4>
-                    <p class="text-xs text-slate-500">專業中文司機與多樣車型選擇。</p>
+                    <p class="text-xs text-slate-500">專業越南司機與多樣車型選擇。</p>
                 </div>
                 <div class="bg-white p-8 rounded-3xl shadow-sm border-t-4 border-tmOrange hover:shadow-lg transition text-center">
                     <i class="fa-solid fa-ticket text-tmOrange text-3xl mb-4"></i>
@@ -593,6 +662,124 @@
         </div>
     </div>
 </div>
+<div id="modal-region-selector" class="fixed inset-0 z-[150] hidden items-center justify-center p-4">
+    <div class="absolute inset-0 bg-black/70 backdrop-blur-md" onclick="toggleModal('modal-region-selector')"></div>
+    <div class="bg-white w-full max-w-lg rounded-[2.5rem] relative z-10 p-8 md:p-10 shadow-2xl fade-in overflow-hidden border border-white/20">
+        <div class="flex justify-between items-center mb-10 text-left">
+            <div>
+                <h3 class="text-3xl font-black text-tmDeepGreen">探索越南</h3>
+                <p class="text-slate-400 text-sm mt-1">請選擇您預計旅遊的地區</p>
+            </div>
+            <button onclick="toggleModal('modal-region-selector')" class="w-10 h-10 flex items-center justify-center rounded-full bg-slate-50 text-slate-400 hover:bg-tmOrange/10 hover:text-tmOrange transition-all">
+                <i class="fa-solid fa-xmark text-xl"></i>
+            </button>
+        </div>
+        
+        <div class="space-y-4">
+            <button onclick="showRegionIntro('hanoi')" class="w-full flex items-center justify-between p-6 rounded-[2rem] border-2 border-slate-50 bg-slate-50/50 hover:border-tmGreen hover:bg-white hover:shadow-xl hover:shadow-tmGreen/10 transition-all duration-300 group text-left">
+                <div class="flex items-center gap-5">
+                    <div class="w-14 h-14 bg-orange-50 rounded-2xl flex items-center justify-center text-3xl shadow-inner group-hover:scale-110 transition-transform">🏮</div>
+                    <div>
+                        <p class="font-black text-slate-800 text-xl group-hover:text-tmDeepGreen">河內 <span class="text-sm font-medium text-slate-400 ml-1">Hanoi</span></p>
+                        <p class="text-sm text-slate-500 font-medium">深度北越 · 經典巡禮</p>
+                    </div>
+                </div>
+                <i class="fa-solid fa-arrow-right text-slate-300 group-hover:text-tmGreen group-hover:translate-x-1 transition-all"></i>
+            </button>
+
+            <button onclick="showRegionIntro('danang')" class="w-full flex items-center justify-between p-6 rounded-[2rem] border-2 border-slate-50 bg-slate-50/50 hover:border-tmOrange hover:bg-white hover:shadow-xl hover:shadow-tmOrange/10 transition-all duration-300 group text-left">
+                <div class="flex items-center gap-5">
+                    <div class="w-14 h-14 bg-blue-50 rounded-2xl flex items-center justify-center text-3xl shadow-inner group-hover:scale-110 transition-transform">🌉</div>
+                    <div>
+                        <p class="font-black text-slate-800 text-xl group-hover:text-tmOrange">峴港 <span class="text-sm font-medium text-slate-400 ml-1">Da Nang</span></p>
+                        <p class="text-sm text-slate-500 font-medium">世界遺產 · 山海奇觀</p>
+                    </div>
+                </div>
+                <i class="fa-solid fa-arrow-right text-slate-300 group-hover:text-tmOrange group-hover:translate-x-1 transition-all"></i>
+            </button>
+
+            <button onclick="alertComingSoon()" class="w-full flex items-center justify-between p-6 rounded-[2rem] border-2 border-dashed border-slate-200 bg-slate-50/30 opacity-70 grayscale cursor-not-allowed text-left">
+                <div class="flex items-center gap-5">
+                    <div class="w-14 h-14 bg-slate-100 rounded-2xl flex items-center justify-center text-3xl">☕</div>
+                    <div>
+                        <p class="font-bold text-slate-400 text-xl">胡志明 <span class="text-sm font-medium ml-1">Saigon</span></p>
+                        <p class="text-sm text-slate-400 font-medium">行程開發中，敬請期待</p>
+                    </div>
+                </div>
+                <div class="flex flex-col items-end gap-1">
+                    <i class="fa-solid fa-lock text-slate-300 text-lg"></i>
+                    <span class="text-[9px] font-black bg-slate-200 text-slate-500 px-2.5 py-1 rounded-full">COMING SOON</span>
+                </div>
+            </button>
+        </div>
+    </div>
+</div>
+
+<div id="modal-region-intro" class="fixed inset-0 z-[160] hidden items-center justify-center p-4">
+    <div class="absolute inset-0 bg-black/80 backdrop-blur-md" onclick="toggleModal('modal-region-intro')"></div>
+    <div class="bg-white w-full max-w-xl rounded-[2.5rem] relative z-10 overflow-hidden shadow-2xl fade-in flex flex-col max-h-[90vh]">
+        <div class="h-48 md:h-56 shrink-0 relative overflow-hidden">
+            <img id="intro-img" src="" class="w-full h-full object-cover">
+            <div class="absolute inset-0 bg-gradient-to-t from-white via-transparent"></div>
+            <button onclick="toggleModal('modal-region-intro')" class="absolute top-4 right-4 bg-black/30 text-white w-9 h-9 rounded-full backdrop-blur-md flex items-center justify-center text-2xl hover:bg-tmOrange transition">&times;</button>
+        </div>
+        <div class="p-8 md:p-10 text-left overflow-y-auto flex-1 style-1">
+            <div id="intro-tags" class="flex flex-wrap gap-2 mb-4"></div>
+            <h3 id="intro-title" class="text-2xl md:text-3xl font-black text-tmDeepGreen mb-6 leading-tight"></h3>
+            
+            <div id="intro-desc"></div> 
+        </div>
+        <div class="p-6 bg-white border-t border-slate-50 shrink-0">
+            <button onclick="goContact()" class="w-full py-5 bg-tmOrange text-white font-black rounded-2xl shadow-lg hover:scale-[1.02] transition transform flex items-center justify-center gap-3 relative overflow-hidden group">
+                 <div class="absolute inset-0 w-1/2 h-full bg-white/20 -skew-x-[30deg] -translate-x-[150%] group-hover:translate-x-[250%] transition-transform duration-1000"></div>
+                <i class="fa-brands fa-line text-2xl"></i> 聯繫專員了解細節 Contact Agent for Details
+            </button>
+        </div>
+    </div>
+</div>
+
+<div id="modal-contact-list" class="fixed inset-0 z-[200] hidden items-center justify-center p-4">
+    <div class="absolute inset-0 bg-black/70 backdrop-blur-sm" onclick="toggleModal('modal-contact-list')"></div>
+    <div class="bg-white w-full max-w-md rounded-[2.5rem] relative z-10 p-8 md:p-10 shadow-2xl text-center border-t-8 border-tmGreen fade-in">
+        <h3 class="text-2xl font-black text-tmDeepGreen mb-8">聯繫專員為您提供細節</h3>
+        <div class="space-y-4">
+            <a href="https://line.me/ti/p/k2mbDjPZUw" target="_blank" class="flex items-center justify-between bg-[#06C755] text-white p-5 rounded-2xl hover:scale-[1.03] hover:shadow-lg transition shadow-md group">
+                <div class="flex items-center gap-4"><i class="fa-brands fa-line text-3xl"></i><span class="font-bold text-lg">LINE 快速諮詢</span></div>
+                <i class="fa-solid fa-chevron-right opacity-50 group-hover:translate-x-1 transition-transform"></i>
+            </a>
+            <a href="https://wa.me/886978099267" target="_blank" class="flex items-center justify-between bg-[#25D366] text-white p-5 rounded-2xl hover:scale-[1.03] hover:shadow-lg transition shadow-md group">
+                <div class="flex items-center gap-4"><i class="fa-brands fa-whatsapp text-3xl"></i><span class="font-bold text-lg">WhatsApp 諮詢 (1)</span></div>
+                <i class="fa-solid fa-chevron-right opacity-50 group-hover:translate-x-1 transition-transform"></i>
+            </a>
+            <a href="https://wa.me/8869398377792" target="_blank" class="flex items-center justify-between bg-[#25D366] text-white p-5 rounded-2xl hover:scale-[1.03] hover:shadow-lg transition shadow-md group">
+                <div class="flex items-center gap-4"><i class="fa-brands fa-whatsapp text-3xl"></i><span class="font-bold text-lg">WhatsApp 諮詢 (2)</span></div>
+                <i class="fa-solid fa-chevron-right opacity-50 group-hover:translate-x-1 transition-transform"></i>
+            </a>
+            <button onclick="copyAndNotify('soyuuuuu', 'WeChat 1')" class="w-full flex items-center justify-between bg-[#07C160] text-white p-5 rounded-2xl hover:scale-[1.03] hover:shadow-lg transition shadow-md text-left group">
+                <div class="flex items-center gap-4">
+                    <i class="fa-brands fa-weixin text-3xl"></i>
+                    <span class="font-bold text-base leading-tight">WeChat 專員 1<br><span class="text-[11px] opacity-90 font-medium tracking-wide bg-white/10 px-2 py-0.5 rounded mt-1 inline-block">ID: soyuuuuu</span></span>
+                </div>
+                <i class="fa-solid fa-copy opacity-60 group-hover:scale-110 transition-transform"></i>
+            </button>
+            <button onclick="copyAndNotify('yoshilin05', 'WeChat 2')" class="w-full flex items-center justify-between bg-[#07C160] text-white p-5 rounded-2xl hover:scale-[1.03] hover:shadow-lg transition shadow-md text-left group">
+                <div class="flex items-center gap-4">
+                    <i class="fa-brands fa-weixin text-3xl"></i>
+                    <span class="font-bold text-base leading-tight">WeChat 專員 2<br><span class="text-[11px] opacity-90 font-medium tracking-wide bg-white/10 px-2 py-0.5 rounded mt-1 inline-block">ID: yoshilin05</span></span>
+                </div>
+                <i class="fa-solid fa-copy opacity-60 group-hover:scale-110 transition-transform"></i>
+            </button>
+        </div>
+        <button onclick="toggleModal('modal-contact-list')" class="mt-10 text-slate-400 font-bold hover:text-tmDeepGreen hover:scale-105 transition">回到頁面</button>
+    </div>
+</div>
+
+<style>
+    .style-1::-webkit-scrollbar { width: 6px; }
+    .style-1::-webkit-scrollbar-track { bg-color: #f1f1f1; border-radius: 10px; }
+    .style-1::-webkit-scrollbar-thumb { bg-color: #e2e8f0; border-radius: 10px; }
+    .style-1::-webkit-scrollbar-thumb:hover { bg-color: #cbd5e1; }
+</style>
 <script>
     // 通用開關控制
     function toggleModal(modalId) {
@@ -638,6 +825,118 @@
             document.body.style.overflow = '';
         }
     });
+// ==========================================
+// 1. 數據庫整合 (河內精準文字 + 免責聲明 HTML)
+// ==========================================
+const regionData = {
+    'hanoi': {
+        title: '北越精選套組：河內與沙壩 5天4夜 365 USD+(人) /5D4N Northern Vietnam Essential Tour | From 365 USD+(Pax)',
+        // 整合生動排版與免責聲明
+        desc: '<div class="text-slate-600 leading-relaxed space-y-3 mb-10 border-l-4 border-tmGreen/20 pl-5">' +
+              '<span class="font-bold text-tmDeepGreen block mb-3 text-xl tracking-tight">【深度北越 · 經典巡禮】</span>' +
+              '● 走訪千年文廟與奇幻火車街，體驗古城魅力夜遊。<br>' +
+              '● 前往雲端山城沙壩，深入貓貓村感受少數民族純樸風情。<br>' +
+              '● 征服中南半島之巔！搭乘番西邦纜車，隨後返回河內。<br>' +
+              '● 世界級奇景下龍灣巡航，親身走進海上石灰岩神祕地貌。<br>' +
+              '● 享受河內悠閒晨間時光，專車送機，帶著滿滿回憶歸賦。</div>' +
+              
+              // 整合免責聲明區塊 (生動藍色方框)
+              '<div class="bg-blue-50 border-2 border-blue-100 rounded-[1.8rem] p-6 shadow-inner relative overflow-hidden group">' +
+              '<i class="fa-solid fa-circle-info absolute -right-4 -bottom-4 text-blue-100 text-6xl rotate-12 transition-transform group-hover:rotate-0"></i>' +
+              '<div class="relative z-10">' +
+              '<p class="text-blue-800 font-black text-lg mb-2.5 flex items-center gap-2.5"><i class="fa-solid fa-shield-halved"></i>旅遊行程推薦聲明</p>' +
+              '<p class="text-slate-700 text-[14px] leading-relaxed mb-4 font-medium">Tamarind 旅遊諮詢： 我們專注於越南在地資源的篩選與推薦，為您對接優秀且專業的優質服務團隊。所有套組行程均由在地合作夥伴負責執行與現地照顧；透過這種專業分工，讓您能直接對接最道地的執行端，享有最即時、專業的在地支援與旅遊體驗 😊</p>' +
+              '<div class="border-t border-blue-200 my-4"></div>' +
+              '<p class="text-blue-800 font-black text-[15px] mb-1.5">Travel Recommendation Notice</p>' +
+              '<p class="text-slate-700 text-[13px] opacity-80 leading-relaxed">Tamarind Travel Consulting: We focus on sourcing and recommending the best local resources, connecting you with elite, professional service teams across Vietnam. All travel packages are executed by our local partners who provide on-ground care. This professional division of labor ensures you interface directly with local experts for the most authentic support and travel experience 😊</p>' +
+              '</div></div>',
+        tags: ['下龍灣遊船', '沙壩雲端山城', '番西邦纜車'],
+        image: 'images/hanoi-cover.jpg'
+    },
+    'danang': {
+        title: '中越精選套組：峴港、會安與巴拿山 5天4夜 298USD+(人)/5D4N Da Nang, Hoi An & Ba Na Hills | From 298 USD+(Pax)',
+        desc: '<div class="text-slate-600 leading-relaxed space-y-3 mb-10 border-l-4 border-tmOrange/20 pl-5">' +
+              '<span class="font-bold text-tmDeepGreen block mb-3 text-xl tracking-tight">【世界遺產 · 山海奇觀】</span>' +
+              '● <span class="font-bold text-slate-800">巴拿山雲端樂園</span>：搭乘世界級纜車飛越雲端，在夢幻「黃金佛手橋」上俯瞰壯麗山景，漫步歐式法式村莊。<br>' +
+              '● <span class="font-bold text-slate-800">世界遺產古都</span>：穿梭燈籠點點的會安古鎮，走進順化皇城，感受末代王朝的建築之美。<br>' +
+              '● <span class="font-bold text-slate-800">山海奇觀探索</span>：探索五行山神祕洞窟與靈應寺大佛，並從山茶半島俯瞰峴港美麗海灣全景。<br>' +
+              '● <span class="font-bold text-slate-800">在地人文美食</span>：深度體驗中越魅力，品嚐順化皇家料理、峴港新鮮海鮮及會安道地小吃。</div>' +
+              
+              // 整合免責聲明區塊
+              '<div class="bg-blue-50 border-2 border-blue-100 rounded-[1.8rem] p-6 shadow-inner relative overflow-hidden group">' +
+              '<i class="fa-solid fa-circle-info absolute -right-4 -bottom-4 text-blue-100 text-6xl rotate-12 transition-transform group-hover:rotate-0"></i>' +
+              '<div class="relative z-10">' +
+              '<p class="text-blue-800 font-black text-lg mb-2.5 flex items-center gap-2.5"><i class="fa-solid fa-shield-halved"></i>旅遊行程推薦聲明</p>' +
+              '<p class="text-slate-700 text-[14px] leading-relaxed mb-4 font-medium">Tamarind 旅遊諮詢： 我們專注於越南在地資源的篩選與推薦，為您對接優秀且專業的優質服務團隊。所有套組行程均由在地合作夥伴負責執行與現地照顧；透過這種專業分工，讓您能直接對接最道地的執行端，享有最即時、專業的在地支援與旅遊體驗 😊</p>' +
+              '<div class="border-t border-blue-200 my-4"></div>' +
+              '<p class="text-blue-800 font-black text-[15px] mb-1.5">Travel Recommendation Notice</p>' +
+              '<p class="text-slate-700 text-[13px] opacity-80 leading-relaxed">Tamarind Travel Consulting: We focus on sourcing and recommending the best local resources, connecting you with elite, professional service teams across Vietnam. All travel packages are executed by our local partners who provide on-ground care. This professional division of labor ensures you interface directly with local experts for the most authentic support and travel experience 😊' +
+              '</div></div>',
+        tags: ['佛手大橋', '會安古鎮燈籠', '五行山探險'],
+        image: 'images/danang-cover.jpg'
+    }
+};
+
+// ==========================================
+// 2. 生動互動邏輯
+// ==========================================
+
+// A. 顯示地區介紹窗 (解析 HTML)
+function showRegionIntro(regionKey) {
+    const data = regionData[regionKey];
+    if (!data) return;
+
+    // 填入內容
+    document.getElementById('intro-title').innerText = data.title;
+    // 重點：使用 innerHTML 解析免責聲明 HTML
+    document.getElementById('intro-desc').innerHTML = data.desc; 
+    document.getElementById('intro-img').src = data.image;
+    
+    // 渲染生動標籤
+    document.getElementById('intro-tags').innerHTML = data.tags.map(tag => 
+        `<span class="bg-tmOrange/10 text-tmOrange text-[11px] font-bold px-3 py-1.5 rounded-full border border-tmOrange/20 shadow-sm">${tag}</span>`
+    ).join('');
+
+    // 先關閉地區選擇窗
+    toggleModal('modal-region-selector');
+    // 延遲開啟詳情窗 (生動轉場)
+    setTimeout(() => {
+        toggleModal('modal-region-intro');
+        // 打開時重置滾動位置到頂部
+        document.querySelector('#modal-region-intro .overflow-y-auto').scrollTop = 0;
+    }, 350);
+}
+
+// B. 生動跳轉：從詳情窗轉至聯絡窗 (修復功能失效)
+function goContact() {
+    // 1. 先關閉詳情窗
+    toggleModal('modal-region-intro');
+    // 2. 延遲 350ms，確保舊窗完全關閉、層級釋放後，再開啟聯絡窗
+    setTimeout(() => {
+        const contactModal = document.getElementById('modal-contact-list');
+        if (contactModal) {
+            toggleModal('modal-contact-list');
+        } else {
+            console.error("找不到 modal-contact-list，請檢查 HTML ID");
+        }
+    }, 350);
+}
+
+// C. WeChat 複製功能與生動提示
+function copyAndNotify(id, name) {
+    navigator.clipboard.writeText(id).then(() => {
+        // 使用更生動的 alert 內容
+        alert('🎉 已成功複製 ' + name + ' ID: ' + id + '\n請前往 WeChat 貼上搜尋即可聯繫專員！');
+    }).catch(() => {
+        // 失敗時的備案
+        alert('請手動搜尋 ' + name + ' ID: ' + id);
+    });
+}
+
+// D. 開發中提示
+function alertComingSoon() {
+    alert('☕ 胡志明市行程目前正由在地團隊深度開發中，敬請期待！');
+}
 </script>
 </body>
 </html>
