@@ -742,38 +742,48 @@
     <div class="absolute inset-0 bg-black/70 backdrop-blur-sm" onclick="toggleModal('modal-contact-list')"></div>
     <div class="bg-white w-full max-w-md rounded-[2.5rem] relative z-10 p-8 md:p-10 shadow-2xl text-center border-t-8 border-tmGreen fade-in">
         <h3 class="text-2xl font-black text-tmDeepGreen mb-8">聯繫專員為您提供細節</h3>
+        
         <div class="space-y-4">
             <a href="https://line.me/ti/p/k2mbDjPZUw" target="_blank" class="flex items-center justify-between bg-[#06C755] text-white p-5 rounded-2xl hover:scale-[1.03] hover:shadow-lg transition shadow-md group">
                 <div class="flex items-center gap-4"><i class="fa-brands fa-line text-3xl"></i><span class="font-bold text-lg">LINE 快速諮詢</span></div>
                 <i class="fa-solid fa-chevron-right opacity-50 group-hover:translate-x-1 transition-transform"></i>
             </a>
+
             <a href="https://wa.me/886978099267" target="_blank" class="flex items-center justify-between bg-[#25D366] text-white p-5 rounded-2xl hover:scale-[1.03] hover:shadow-lg transition shadow-md group">
-                <div class="flex items-center gap-4"><i class="fa-brands fa-whatsapp text-3xl"></i><span class="font-bold text-lg">WhatsApp 諮詢 (1)</span></div>
+                <div class="flex items-center gap-4"><i class="fa-brands fa-whatsapp text-3xl"></i><span class="font-bold text-lg">WhatsApp 專員 1</span></div>
                 <i class="fa-solid fa-chevron-right opacity-50 group-hover:translate-x-1 transition-transform"></i>
             </a>
             <a href="https://wa.me/8869398377792" target="_blank" class="flex items-center justify-between bg-[#25D366] text-white p-5 rounded-2xl hover:scale-[1.03] hover:shadow-lg transition shadow-md group">
-                <div class="flex items-center gap-4"><i class="fa-brands fa-whatsapp text-3xl"></i><span class="font-bold text-lg">WhatsApp 諮詢 (2)</span></div>
+                <div class="flex items-center gap-4"><i class="fa-brands fa-whatsapp text-3xl"></i><span class="font-bold text-lg">WhatsApp 專員 2</span></div>
                 <i class="fa-solid fa-chevron-right opacity-50 group-hover:translate-x-1 transition-transform"></i>
             </a>
-            <button onclick="copyAndNotify('soyuuuuu', 'WeChat 1')" class="w-full flex items-center justify-between bg-[#07C160] text-white p-5 rounded-2xl hover:scale-[1.03] hover:shadow-lg transition shadow-md text-left group">
+
+            <button onclick="copyAndNotify('soyuuuuu', 'WeChat 專員 1')" class="w-full flex items-center justify-between bg-[#07C160] text-white p-5 rounded-2xl hover:scale-[1.03] hover:shadow-lg transition shadow-md text-left group">
                 <div class="flex items-center gap-4">
                     <i class="fa-brands fa-weixin text-3xl"></i>
-                    <span class="font-bold text-base leading-tight">WeChat 專員 1<br><span class="text-[11px] opacity-90 font-medium tracking-wide bg-white/10 px-2 py-0.5 rounded mt-1 inline-block">ID: soyuuuuu</span></span>
+                    <span class="font-bold text-lg">WeChat 專員 1</span>
                 </div>
-                <i class="fa-solid fa-copy opacity-60 group-hover:scale-110 transition-transform"></i>
+                <div class="flex items-center gap-2 opacity-60">
+                    <span class="text-xs font-bold uppercase tracking-widest">點擊複製 ID</span>
+                    <i class="fa-solid fa-copy group-hover:scale-110 transition-transform"></i>
+                </div>
             </button>
-            <button onclick="copyAndNotify('yoshilin05', 'WeChat 2')" class="w-full flex items-center justify-between bg-[#07C160] text-white p-5 rounded-2xl hover:scale-[1.03] hover:shadow-lg transition shadow-md text-left group">
+
+            <button onclick="copyAndNotify('yoshilin05', 'WeChat 專員 2')" class="w-full flex items-center justify-between bg-[#07C160] text-white p-5 rounded-2xl hover:scale-[1.03] hover:shadow-lg transition shadow-md text-left group">
                 <div class="flex items-center gap-4">
                     <i class="fa-brands fa-weixin text-3xl"></i>
-                    <span class="font-bold text-base leading-tight">WeChat 專員 2<br><span class="text-[11px] opacity-90 font-medium tracking-wide bg-white/10 px-2 py-0.5 rounded mt-1 inline-block">ID: yoshilin05</span></span>
+                    <span class="font-bold text-lg">WeChat 專員 2</span>
                 </div>
-                <i class="fa-solid fa-copy opacity-60 group-hover:scale-110 transition-transform"></i>
+                <div class="flex items-center gap-2 opacity-60">
+                    <span class="text-xs font-bold uppercase tracking-widest">點擊複製 ID</span>
+                    <i class="fa-solid fa-copy group-hover:scale-110 transition-transform"></i>
+                </div>
             </button>
         </div>
+
         <button onclick="toggleModal('modal-contact-list')" class="mt-10 text-slate-400 font-bold hover:text-tmDeepGreen hover:scale-105 transition">回到頁面</button>
     </div>
 </div>
-
 <style>
     .style-1::-webkit-scrollbar { width: 6px; }
     .style-1::-webkit-scrollbar-track { bg-color: #f1f1f1; border-radius: 10px; }
