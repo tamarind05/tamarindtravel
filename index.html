@@ -698,20 +698,18 @@
                 <i class="fa-solid fa-arrow-right text-slate-300 group-hover:text-tmOrange group-hover:translate-x-1 transition-all"></i>
             </button>
 
-            <button onclick="alertComingSoon()" class="w-full flex items-center justify-between p-6 rounded-[2rem] border-2 border-dashed border-slate-200 bg-slate-50/30 opacity-70 grayscale cursor-not-allowed text-left">
-                <div class="flex items-center gap-5">
-                    <div class="w-14 h-14 bg-slate-100 rounded-2xl flex items-center justify-center text-3xl">☕</div>
-                    <div>
-                        <p class="font-bold text-slate-400 text-xl">胡志明 <span class="text-sm font-medium ml-1">Saigon</span></p>
-                        <p class="text-sm text-slate-400 font-medium">行程開發中，敬請期待</p>
-                    </div>
-                </div>
-                <div class="flex flex-col items-end gap-1">
-                    <i class="fa-solid fa-lock text-slate-300 text-lg"></i>
-                    <span class="text-[9px] font-black bg-slate-200 text-slate-500 px-2.5 py-1 rounded-full">COMING SOON</span>
-                </div>
-            </button>
+           <!-- 胡志明 (著重美奈與大叻) -->
+    <button onclick="showRegionIntro('saigon')" class="w-full flex items-center justify-between p-6 rounded-[2rem] border-2 border-slate-50 bg-slate-50/50 hover:border-tmDeepGreen hover:bg-white hover:shadow-xl hover:shadow-tmDeepGreen/10 transition-all duration-300 group text-left">
+        <div class="flex items-center gap-5">
+            <div class="w-14 h-14 bg-yellow-50 rounded-2xl flex items-center justify-center text-3xl shadow-inner group-hover:scale-110 transition-transform">🌵</div>
+            <div>
+                <p class="font-black text-slate-800 text-xl group-hover:text-tmDeepGreen">胡志明 <span class="text-sm font-medium text-slate-400 ml-1">Saigon</span></p>
+                <p class="text-sm text-slate-500 font-medium">美奈沙漠 · 大叻山城避暑</p>
+            </div>
         </div>
+        <i class="fa-solid fa-arrow-right text-slate-300 group-hover:text-tmDeepGreen group-hover:translate-x-1 transition-all"></i>
+    </button>
+</div>
     </div>
 </div>
 
@@ -836,12 +834,12 @@
         }
     });
 // ==========================================
-// 1. 數據庫整合 (河內精準文字 + 免責聲明 HTML)
+// ==========================================
+// 1. 旅遊地區資料數據庫 (最完整版)
 // ==========================================
 const regionData = {
     'hanoi': {
-        title: '北越精選套組：河內與沙壩 5天4夜 365 USD+(人) /5D4N Northern Vietnam Essential Tour | From 365 USD+(Pax)',
-        // 整合生動排版與免責聲明
+        title: '北越精選套組：河內與沙壩 5天4夜 365 USD+(人) / 5D4N Hanoi&Sapa Northern VN Essential Tour 365 USD+(Pax)',
         desc: '<div class="text-slate-600 leading-relaxed space-y-3 mb-10 border-l-4 border-tmGreen/20 pl-5">' +
               '<span class="font-bold text-tmDeepGreen block mb-3 text-xl tracking-tight">【深度北越 · 經典巡禮】</span>' +
               '● 走訪千年文廟與奇幻火車街，體驗古城魅力夜遊。<br>' +
@@ -849,103 +847,99 @@ const regionData = {
               '● 征服中南半島之巔！搭乘番西邦纜車，隨後返回河內。<br>' +
               '● 世界級奇景下龍灣巡航，親身走進海上石灰岩神祕地貌。<br>' +
               '● 享受河內悠閒晨間時光，專車送機，帶著滿滿回憶歸賦。</div>' +
-              
-              // 整合免責聲明區塊 (生動藍色方框)
-              '<div class="bg-blue-50 border-2 border-blue-100 rounded-[1.8rem] p-6 shadow-inner relative overflow-hidden group">' +
-              '<i class="fa-solid fa-circle-info absolute -right-4 -bottom-4 text-blue-100 text-6xl rotate-12 transition-transform group-hover:rotate-0"></i>' +
-              '<div class="relative z-10">' +
-              '<p class="text-blue-800 font-black text-lg mb-2.5 flex items-center gap-2.5"><i class="fa-solid fa-shield-halved"></i>旅遊行程推薦聲明</p>' +
-              '<p class="text-slate-700 text-[14px] leading-relaxed mb-4 font-medium">Tamarind 旅遊諮詢： 我們專注於越南在地資源的篩選與推薦，為您對接優秀且專業的優質服務團隊。所有套組行程均由在地合作夥伴負責執行與現地照顧；透過這種專業分工，讓您能直接對接最道地的執行端，享有最即時、專業的在地支援與旅遊體驗 😊</p>' +
-              '<div class="border-t border-blue-200 my-4"></div>' +
-              '<p class="text-blue-800 font-black text-[15px] mb-1.5">Travel Recommendation Notice</p>' +
-              '<p class="text-slate-700 text-[13px] opacity-80 leading-relaxed">Tamarind Travel Consulting: We focus on sourcing and recommending the best local resources, connecting you with elite, professional service teams across Vietnam. All travel packages are executed by our local partners who provide on-ground care. This professional division of labor ensures you interface directly with local experts for the most authentic support and travel experience 😊</p>' +
-              '</div></div>',
+              getFullDisclaimer(),
         tags: ['下龍灣遊船', '沙壩雲端山城', '番西邦纜車'],
         image: 'images/hanoi-cover.jpg'
     },
     'danang': {
-        title: '中越精選套組：峴港、會安與巴拿山 5天4夜 298USD+(人)/5D4N Da Nang, Hoi An & Ba Na Hills | From 298 USD+(Pax)',
+        title: '中越精選套組：峴港、會安與巴拿山 5天4夜 298USD+(人) / 5D4N Da Nang, Hoi An & Ba Na Hills 298USD+(Pax)',
         desc: '<div class="text-slate-600 leading-relaxed space-y-3 mb-10 border-l-4 border-tmOrange/20 pl-5">' +
               '<span class="font-bold text-tmDeepGreen block mb-3 text-xl tracking-tight">【世界遺產 · 山海奇觀】</span>' +
               '● <span class="font-bold text-slate-800">巴拿山雲端樂園</span>：搭乘世界級纜車飛越雲端，在夢幻「黃金佛手橋」上俯瞰壯麗山景，漫步歐式法式村莊。<br>' +
               '● <span class="font-bold text-slate-800">世界遺產古都</span>：穿梭燈籠點點的會安古鎮，走進順化皇城，感受末代王朝的建築之美。<br>' +
               '● <span class="font-bold text-slate-800">山海奇觀探索</span>：探索五行山神祕洞窟與靈應寺大佛，並從山茶半島俯瞰峴港美麗海灣全景。<br>' +
               '● <span class="font-bold text-slate-800">在地人文美食</span>：深度體驗中越魅力，品嚐順化皇家料理、峴港新鮮海鮮及會安道地小吃。</div>' +
-              
-              // 整合免責聲明區塊
-              '<div class="bg-blue-50 border-2 border-blue-100 rounded-[1.8rem] p-6 shadow-inner relative overflow-hidden group">' +
-              '<i class="fa-solid fa-circle-info absolute -right-4 -bottom-4 text-blue-100 text-6xl rotate-12 transition-transform group-hover:rotate-0"></i>' +
-              '<div class="relative z-10">' +
-              '<p class="text-blue-800 font-black text-lg mb-2.5 flex items-center gap-2.5"><i class="fa-solid fa-shield-halved"></i>旅遊行程推薦聲明</p>' +
-              '<p class="text-slate-700 text-[14px] leading-relaxed mb-4 font-medium">Tamarind 旅遊諮詢： 我們專注於越南在地資源的篩選與推薦，為您對接優秀且專業的優質服務團隊。所有套組行程均由在地合作夥伴負責執行與現地照顧；透過這種專業分工，讓您能直接對接最道地的執行端，享有最即時、專業的在地支援與旅遊體驗 😊</p>' +
-              '<div class="border-t border-blue-200 my-4"></div>' +
-              '<p class="text-blue-800 font-black text-[15px] mb-1.5">Travel Recommendation Notice</p>' +
-              '<p class="text-slate-700 text-[13px] opacity-80 leading-relaxed">Tamarind Travel Consulting: We focus on sourcing and recommending the best local resources, connecting you with elite, professional service teams across Vietnam. All travel packages are executed by our local partners who provide on-ground care. This professional division of labor ensures you interface directly with local experts for the most authentic support and travel experience 😊' +
-              '</div></div>',
+              getFullDisclaimer(),
         tags: ['佛手大橋', '會安古鎮燈籠', '五行山探險'],
         image: 'images/danang-cover.jpg'
+    },
+    'saigon': {
+        title: '南越三城精選：時尚胡志明、夢幻美奈與浪漫大叻 5天4夜深度遊 360USD+(人) / 5D4N HCM&Mui Ne & Da Lat Dream Tour 360USD+(Pax)',
+        desc: '<div class="text-slate-600 leading-relaxed space-y-3 mb-10 border-l-4 border-tmDeepGreen/20 pl-5">' +
+              '<span class="font-bold text-tmDeepGreen block mb-3 text-xl tracking-tight">【沙漠與山城的絕美邂逅】</span>' +
+              '● <span class="text-tmOrange font-bold">美奈 Mui Ne：</span>體驗紅白沙丘日出震撼，美奈漁村，探索仙女溪地質奇觀。<br>' +
+              '● <span class="text-tmDeepGreen font-bold">大叻 Da Lat：</span>在海拔 1500 米的法式避暑山城，走訪瘋狂屋、達坦拉瀑布與大叻茶園。<br>' +
+              '● <span class="text-tmDeepGreen font-bold">在地深度體驗：</span>享受大叻茶園情調、靈福寺建築之美與大叻粘土隧道獨特景致。。<br>' +
+              '● <span class="text-tmDeepGreen font-bold">胡志明市巡禮：</span>市區自由探索（檳城市場、粉紅教堂、中央郵局與熱鬧范五老街）。</div>' +
+              getFullDisclaimer(),
+        tags: ['震撼紅沙丘&吉普車體驗', '大叻避暑山城', '胡志明市自由巡禮'],
+        image: 'images/muine-dalat.jpg'
     }
 };
 
-// ==========================================
-// 2. 生動互動邏輯
-// ==========================================
-
-// A. 顯示地區介紹窗 (解析 HTML)
+/**
+ * 2. 獲取最完整的雙語免責聲明 HTML
+ */
+function getFullDisclaimer() {
+    return '<div class="bg-blue-50 border-2 border-blue-100 rounded-[1.8rem] p-6 shadow-inner relative overflow-hidden group">' +
+           '<i class="fa-solid fa-circle-info absolute -right-4 -bottom-4 text-blue-100 text-6xl rotate-12 transition-transform group-hover:rotate-0"></i>' +
+           '<div class="relative z-10">' +
+           '<p class="text-blue-800 font-black text-lg mb-2.5 flex items-center gap-2.5"><i class="fa-solid fa-shield-halved"></i>旅遊行程推薦聲明</p>' +
+           '<p class="text-slate-700 text-[14px] leading-relaxed mb-4 font-medium">Tamarind 旅遊諮詢： 我們專注於越南在地資源的篩選與推薦，為您對接優秀且專業的優質服務團隊。所有套組行程均由在地合作夥伴負責執行與現地照顧；透過這種專業分工，讓您能直接對接最道地的執行端，享有最即時、專業的在地支援與旅遊體驗 😊</p>' +
+           '<div class="border-t border-blue-200 my-4"></div>' +
+           '<p class="text-blue-800 font-black text-[15px] mb-1.5">Travel Recommendation Notice</p>' +
+           '<p class="text-slate-700 text-[13px] opacity-80 leading-relaxed">Tamarind Travel Consulting: We focus on sourcing and recommending the best local resources, connecting you with elite, professional service teams across Vietnam. All travel packages are executed by our local partners who provide on-ground care. This professional division of labor ensures you interface directly with local experts for the most authentic support and travel experience 😊</p>' +
+           '</div></div>';
+}// A. 顯示地區介紹窗
 function showRegionIntro(regionKey) {
     const data = regionData[regionKey];
     if (!data) return;
 
-    // 填入內容
     document.getElementById('intro-title').innerText = data.title;
-    // 重點：使用 innerHTML 解析免責聲明 HTML
     document.getElementById('intro-desc').innerHTML = data.desc; 
     document.getElementById('intro-img').src = data.image;
     
-    // 渲染生動標籤
     document.getElementById('intro-tags').innerHTML = data.tags.map(tag => 
         `<span class="bg-tmOrange/10 text-tmOrange text-[11px] font-bold px-3 py-1.5 rounded-full border border-tmOrange/20 shadow-sm">${tag}</span>`
     ).join('');
 
-    // 先關閉地區選擇窗
+    // 先關閉選擇窗，再開啟詳情窗
     toggleModal('modal-region-selector');
-    // 延遲開啟詳情窗 (生動轉場)
     setTimeout(() => {
         toggleModal('modal-region-intro');
-        // 打開時重置滾動位置到頂部
-        document.querySelector('#modal-region-intro .overflow-y-auto').scrollTop = 0;
+        // 重置滾動條
+        const scrollBox = document.querySelector('#modal-region-intro .overflow-y-auto');
+        if(scrollBox) scrollBox.scrollTop = 0;
     }, 350);
 }
 
-// B. 生動跳轉：從詳情窗轉至聯絡窗 (修復功能失效)
+// B. 從詳情窗轉至聯絡窗 (關鍵：解決層級衝突)
 function goContact() {
-    // 1. 先關閉詳情窗
-    toggleModal('modal-region-intro');
-    // 2. 延遲 350ms，確保舊窗完全關閉、層級釋放後，再開啟聯絡窗
+    toggleModal('modal-region-intro'); // 關閉詳情
     setTimeout(() => {
         const contactModal = document.getElementById('modal-contact-list');
         if (contactModal) {
-            toggleModal('modal-contact-list');
-        } else {
-            console.error("找不到 modal-contact-list，請檢查 HTML ID");
+            toggleModal('modal-contact-list'); // 開啟聯絡清單
         }
     }, 350);
 }
 
-// C. WeChat 複製功能與生動提示
+// C. WeChat 複製
 function copyAndNotify(id, name) {
     navigator.clipboard.writeText(id).then(() => {
-        // 使用更生動的 alert 內容
         alert('🎉 已成功複製 ' + name + ' ID: ' + id + '\n請前往 WeChat 貼上搜尋即可聯繫專員！');
     }).catch(() => {
-        // 失敗時的備案
         alert('請手動搜尋 ' + name + ' ID: ' + id);
     });
 }
 
-// D. 開發中提示
-function alertComingSoon() {
-    alert('☕ 胡志明市行程與在地團隊深度開發中，敬請期待！');
+// D. 通用切換邏輯
+function toggleModal(id) {
+    const modal = document.getElementById(id);
+    if (modal) {
+        modal.classList.toggle('hidden');
+        modal.classList.toggle('flex');
+    }
 }
 </script>
 </body>
